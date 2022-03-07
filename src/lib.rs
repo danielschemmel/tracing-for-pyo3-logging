@@ -1,5 +1,6 @@
 use pyo3::prelude::*;
 
+/// Consume a Python `logging.LogRecord` and emit a Rust `tracing::Event` instead.
 #[pyfunction]
 fn host_log(record: &PyAny) -> PyResult<()> {
 	let level = record.getattr("levelno")?;
@@ -20,6 +21,14 @@ fn host_log(record: &PyAny) -> PyResult<()> {
 	Ok(())
 }
 
+/// Modifies the Python `logging` module to deliver its log messages to the host `tracing::Subscriber` by default.
+/// To achieve this goal, the following changes are made to the module:
+/// - A new builtin function `logging.host_log` transcodes `logging.LogRecord`s to `tracing::Event`s. This function
+///   is not exported in `logging.__all__`, as it is not intended to be called directly.
+/// - A new class `logging.HostHandler` provides a `logging.Handler` that delivers all records to `host_log`.
+/// - `logging.basicConfig` is changed to use `logging.HostHandler` by default.
+/// Since any call like `logging.warn(...)` sets up logging via `logging.basicConfig`, all log messages are now
+/// delivered to `crate::host_log`, which will send them to `tracing::event!`.
 pub fn setup_logging(py: Python) -> PyResult<()> {
 	let logging = py.import("logging")?;
 

@@ -1,0 +1,22 @@
+[package]
+name = "tracing-for-pyo3-logging"
+version = "0.0.0"
+authors = ["Daniel Schemmel <daniel@schemmel.net"]
+description = "Enables tracing for pyo3-based embedded python applications using Python's logging module."
+
+# Other metadata
+edition = "2021"
+publish = false
+
+[features]
+default = []
+log = ["tracing/log"]
+
+[dependencies]
+pyo3 = { version = "0.16", features = [] }
+tracing = "0.1"
+
+[dev-dependencies]
+pretty_assertions = "1"
+
+[build-dependencies]

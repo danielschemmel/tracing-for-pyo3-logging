@@ -4,6 +4,10 @@ version = "0.0.0"
 authors = ["Daniel Schemmel <daniel@schemmel.net"]
 description = "Enables `tracing` for pyo3-based embedded Python applications using Python's `logging` module."
 edition = "2021"
+publish = ["crates-io"]
+repository = "https://github.com/danielschemmel/tracing-for-pyo3-logging/"
+license = "MIT OR Apache-2.0"
+readme = "README.md"
 
 [features]
 default = []

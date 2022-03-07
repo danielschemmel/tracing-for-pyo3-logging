@@ -5,17 +5,20 @@ use pyo3::prelude::*;
 fn host_log(record: &PyAny) -> PyResult<()> {
 	let level = record.getattr("levelno")?;
 	let message = record.getattr("getMessage")?.call0()?;
+	let pathname = record.getattr("pathname")?;
+	let lineno = record.getattr("lineno")?;
+	let logger_name = record.getattr("name")?;
 
 	if level.ge(40u8)? {
-		tracing::event!(tracing::Level::ERROR, "{message}");
+		tracing::event!(tracing::Level::ERROR, %pathname, %lineno, %logger_name, "{message}");
 	} else if level.ge(30u8)? {
-		tracing::event!(tracing::Level::WARN, "{message}");
+		tracing::event!(tracing::Level::WARN, %pathname, %lineno, %logger_name, "{message}");
 	} else if level.ge(20u8)? {
-		tracing::event!(tracing::Level::INFO, "{message}");
+		tracing::event!(tracing::Level::INFO, %pathname, %lineno, %logger_name, "{message}");
 	} else if level.ge(10u8)? {
-		tracing::event!(tracing::Level::DEBUG, "{message}");
+		tracing::event!(tracing::Level::DEBUG, %pathname, %lineno, %logger_name, "{message}");
 	} else {
-		tracing::event!(tracing::Level::TRACE, "{message}");
+		tracing::event!(tracing::Level::TRACE, %pathname, %lineno, %logger_name, "{message}");
 	}
 
 	Ok(())

@@ -5,7 +5,7 @@ fn main() -> anyhow::Result<()> {
 	tracing_subscriber::fmt::init();
 
 	// The host can now use `tracing` as normal
-	tracing::warn!("Rust put pizza in the oven...");
+	tracing::warn!("Rust put {} in the oven...", "pizza");
 
 	// Ask pyo3 to set up embedded Python interpreter
 	pyo3::prepare_freethreaded_python();
@@ -18,7 +18,7 @@ fn main() -> anyhow::Result<()> {
 		py.run("import logging", None, None)?;
 
 		// Log messages are forwarded to `tracing` and dealt with by the subscriber
-		py.run("logging.error('Python let the pizza burn!')", None, None)?;
+		py.run("logging.error('Python let the %s burn!', 'pizza')", None, None)?;
 
 		Ok(())
 	})?;

@@ -1,6 +1,6 @@
 [package]
 name = "tracing-for-pyo3-logging"
-version = "0.0.2"
+version = "0.0.3"
 authors = ["Daniel Schemmel <daniel@schemmel.net"]
 description = "Enables `tracing` for pyo3-based embedded Python applications using Python's `logging` module."
 publish = ["crates-io"]

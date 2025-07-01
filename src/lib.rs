@@ -2,7 +2,7 @@ use pyo3::prelude::*;
 
 /// Consume a Python `logging.LogRecord` and emit a Rust `tracing::Event` instead.
 #[pyfunction]
-fn host_log(record: &PyAny) -> PyResult<()> {
+fn host_log<'py>(record: Bound<'py, PyAny>) -> PyResult<()> {
 	let level = record.getattr("levelno")?;
 	let message = record.getattr("getMessage")?.call0()?;
 	let pathname = record.getattr("pathname")?;
@@ -35,10 +35,10 @@ fn host_log(record: &PyAny) -> PyResult<()> {
 pub fn setup_logging(py: Python) -> PyResult<()> {
 	let logging = py.import("logging")?;
 
-	logging.setattr("host_log", wrap_pyfunction!(host_log, logging)?)?;
+	logging.setattr("host_log", wrap_pyfunction!(host_log, &logging)?)?;
 
 	py.run(
-		r#"
+		cr#"
 class HostHandler(Handler):
 	def __init__(self, level=0):
 		super().__init__(level=level)
@@ -52,7 +52,7 @@ def basicConfig(*pargs, **kwargs):
 		kwargs["handlers"] = [HostHandler()]
 	return oldBasicConfig(*pargs, **kwargs)
 "#,
-		Some(logging.dict()),
+		Some(&logging.dict()),
 		None,
 	)?;
 

@@ -15,10 +15,10 @@ fn main() -> anyhow::Result<()> {
 		tracing_for_pyo3_logging::setup_logging(py)?;
 
 		// Python code can now `import logging` as usual
-		py.run("import logging", None, None)?;
+		py.run(c"import logging", None, None)?;
 
 		// Log messages are forwarded to `tracing` and dealt with by the subscriber
-		py.run("logging.error('Python let the %s burn!', 'pizza')", None, None)?;
+		py.run(c"logging.error('Python let the %s burn!', 'pizza')", None, None)?;
 
 		Ok(())
 	})?;

@@ -5,7 +5,7 @@ Enables tracing for pyo3-based embedded Python applications using Python's `logg
 ## Usage
 Run `setup_logging` before using `logging` for the first time:
 ```rust
-Python::with_gil(|py| {
+Python::attach(|py| {
 	// Extend the `logging` module to interact with tracing
 	tracing_for_pyo3_logging::setup_logging(py)
 })?;

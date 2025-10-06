@@ -8,9 +8,9 @@ fn main() -> anyhow::Result<()> {
 	tracing::warn!("Rust put {} in the oven...", "pizza");
 
 	// Ask pyo3 to set up embedded Python interpreter
-	pyo3::prepare_freethreaded_python();
+	pyo3::Python::initialize();
 
-	Python::with_gil(|py| -> anyhow::Result<()> {
+	Python::attach(|py| -> anyhow::Result<()> {
 		// Extend the `logging` module to interact with tracing
 		tracing_for_pyo3_logging::setup_logging(py)?;
 

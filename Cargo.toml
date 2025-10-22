@@ -16,7 +16,7 @@ default = []
 log = ["tracing/log"]
 
 [dependencies]
-pyo3 = "0.26.0"
+pyo3 = "0.27.1"
 tracing = "0.1"
 
 [dev-dependencies]
